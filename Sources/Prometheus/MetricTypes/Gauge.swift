@@ -57,11 +57,13 @@ public class PromGauge<NumType: DoubleRepresentable>: PromMetric {
         }
         output.append("# TYPE \(self.name) \(self._type)")
 
-        output.append("\(self.name) \(value)")
-
-        metrics.forEach { (labels, value) in
-            let labelsString = encodeLabels(labels)
-            output.append("\(self.name)\(labelsString) \(value)")
+        if metrics.isEmpty {
+            output.append("\(self.name) \(value)")
+        } else {
+            metrics.forEach { (labels, value) in
+                let labelsString = encodeLabels(labels)
+                output.append("\(self.name)\(labelsString) \(value)")
+            }
         }
 
         return output.joined(separator: "\n")
